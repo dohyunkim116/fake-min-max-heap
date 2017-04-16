@@ -1,5 +1,5 @@
-Driver: Driver.o MinHeap.h
-	g++ -g MinHeap.h Driver.o -o Driver
+Driver: Driver.o MinHeap.h MaxHeap.h
+	g++ -g MinHeap.h MaxHeap.h Driver.o -o Driver
 
 Driver.o: Driver.cpp
 	g++ -g -c Driver.cpp

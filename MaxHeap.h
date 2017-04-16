@@ -1,17 +1,17 @@
-#ifndef _MIN_HEAP_H_
-#define _MIN_HEAP_H_
+#ifndef _MAX_HEAP_H_
+#define _MAX_HEAP_H_
 
 #include <iostream>
 #include <stdexcept>
 using namespace std;
 
 template <class T>
-class MinHeap{
+class MaxHeap{
 public:
-  MinHeap(int capacity = 0);
-  ~MinHeap();
+  MaxHeap(int capacity = 0);
+  ~MaxHeap();
   void insert(T n);
-  int deleteMin();
+  int deleteMax();
   void dump();
   int size() {return m_size;}
   
@@ -25,7 +25,7 @@ private:
   int m_last;
 };
 
-#include "MinHeap.cpp"
+#include "MaxHeap.cpp"
 
 #endif
 

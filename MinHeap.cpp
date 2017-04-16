@@ -10,7 +10,7 @@ MinHeap<T>::~MinHeap() {
 }
 
 template <class T>
-int MinHeap<T>::bubbleUp(int empty, int n){
+int MinHeap<T>::bubbleUp(int empty, T n){
   if (empty == 0){
     return empty+1;
   }
@@ -38,6 +38,34 @@ void MinHeap<T>::insert(T n){
   }
   ++m_size;
 }
+
+template <class T>
+void MinHeap<T>::trickleDown(int currIndex){
+  T currElement = m_heap[currIndex];
+  T minChild;
+  int minChildIndex;
+  if (m_heap[currIndex*2] <= m_heap[currIndex*2+1]){
+    minChild = m_heap[currIndex*2];
+    minChildIndex = currIndex*2;
+  }
+  else {
+    minChild = m_heap[currIndex*2+1];
+    minChildIndex = currIndex*2+1;
+  }
+  
+  if (m_heap[currIndex] <= minChild) return;
+
+  m_heap[currIndex] = minChild;
+  m_heap[minChildIndex] = currElement;
+  trickleDown(minChildIndex);
+}
+
+template <class T>
+int MinHeap<T>::deleteMin(){
+  m_heap[1] = m_heap[m_last];
+  trickleDown(1);
+}
+
 
 template <class T>
 void MinHeap<T>::dump(){

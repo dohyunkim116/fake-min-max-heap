@@ -16,7 +16,8 @@ public:
   int size() {return m_size;}
   
 private:
-  int bubbleUp(int empty, int n);
+  int bubbleUp(int empty, T n);
+  void trickleDown(int currIndex);
 
   int m_capacity;
   int m_size;

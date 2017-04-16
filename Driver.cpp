@@ -12,4 +12,6 @@ int main(){
   H.insert(-1);
   H.insert(-5);
   H.dump();
+  H.deleteMin();
+  H.dump();
 }

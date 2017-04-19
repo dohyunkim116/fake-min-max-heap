@@ -78,14 +78,16 @@ void MinHeap<T>::trickleDown(int currIndex, T replacement){
 }
 
 template <class T>
-int MinHeap<T>::deleteMin(){
+T MinHeap<T>::deleteMin(){
   if (m_size == 0) {
     throw out_of_range("0 elements in min heap");
   }
+  T removedKey = m_heap[1];
   T replacement = m_heap[m_last];
   --m_last;
   --m_size;
   trickleDown(1, replacement);
+  return removedKey;
 }
 
 

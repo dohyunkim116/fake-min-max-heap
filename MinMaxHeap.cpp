@@ -23,16 +23,18 @@ Heap<T>::~Heap() {
 }
 
 template <typename T>
-int Heap<T>::bubbleUp(int emptyIndex, Element<T> e){
-  if (emptyIndex == 1){
-    return emptyIndex;
+void Heap<T>::bubbleUp(int emptyIndex, Element<T> e){
+  if (isCeiling(emptyIndex)) {
+    m_array[emptyIndex] = e;
+    return;
   }
-  if (m_compare(m_array[emptyIndex], e)){
-    return emptyIndex;
+
+  if (m_compare(m_array[emptyIndex/2],e)) {
+    m_array[emptyIndex] = e;
   }
   else {
     m_array[emptyIndex] = m_array[emptyIndex/2];
-    return bubbleUp(emptyIndex/2, e);
+    bubbleUp(emptyIndex/2, e);
   }
 }
 
@@ -116,24 +118,14 @@ int MinMaxHeap<T>::size(){
 template <typename T>
 void MinMaxHeap<T>::insert(const T& data){
   m_MinHeapPtr->m_size++;
+  m_MinHeapPtr->m_last++;
   if (m_MinHeapPtr->m_size > m_MinHeapPtr->m_capacity){
     throw out_of_range("Heap is full.");
   }
+  Element<T> newE;
+  newE.m_key = data;
 
-  m_MinHeapPtr->m_last++;
-  int emptyIndex;
-  Element<T> newElement;
-  newElement.m_key = data;
-
-  //insert to MinHeap
-  if (m_MinHeapPtr->m_compare(m_MinHeapPtr->m_array[emptyIndex/2], newElement)){
-    emptyIndex = m_MinHeapPtr->bubbleUp(m_MinHeapPtr->m_last, newElement);
-    m_MinHeapPtr->m_array[emptyIndex] = newElement;
-  }
-  else {
-    m_MinHeapPtr->m_array[m_MinHeapPtr->m_last] = newElement;
-  }
-
+  m_MinHeapPtr->bubbleUp(m_MinHeapPtr->m_last, newE); 
 }
 
   /*

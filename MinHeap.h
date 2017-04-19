@@ -14,7 +14,7 @@ public:
   MinHeap(int capacity = 0);
   ~MinHeap();
   void insert(T n);
-  int deleteMin();
+  T deleteMin();
   void dump();
   int size() {return m_size;}
   void deleteAt(int index);

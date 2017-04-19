@@ -58,7 +58,7 @@ void sanityCheck(MinMaxHeap<T>& H) {
       }  
 
       if (2*i+1 <= n) {  // has right child
-         H.locateMin(2*i,rightKey,pos) ;
+         H.locateMin(2*i+1,rightKey,pos) ;
 	 if (rightKey < minKey) {  // right child smaller than root 
 	    passed = false ;
 	    cout << "Bad heap condition at i = " << i << ": "
@@ -109,7 +109,7 @@ void sanityCheck(MinMaxHeap<T>& H) {
       }  
 
       if (2*i+1 <= n) {  // has right child
-         H.locateMax(2*i,rightKey,pos) ;
+         H.locateMax(2*i+1,rightKey,pos) ;
 	 if (rightKey > maxKey) {  // right child bigger than root 
 	    passed = false ;
 	    cout << "Bad heap condition at i = " << i << ": "

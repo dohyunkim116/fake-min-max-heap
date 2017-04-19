@@ -5,6 +5,9 @@
 #include <stdexcept>
 using namespace std;
 
+
+
+
 template <class T>
 class MinHeap{
 public:
@@ -14,10 +17,14 @@ public:
   int deleteMin();
   void dump();
   int size() {return m_size;}
+  void deleteAt(int index);
   
 private:
-  int bubbleUp(int empty, T n);
-  void trickleDown(int currIndex, T temp);
+  void bubbleUp(int emptySlot, T n);
+  void trickleDown(int currIndex, T replacement);
+  
+  bool isCeiling(int index){return index/2 == 0;}
+  bool isFloor(int index){return index*2 > m_last;}
 
   int m_capacity;
   int m_size;
@@ -25,7 +32,7 @@ private:
   int m_last;
 };
 
-#include "MinHeap.cpp"
-
 #endif
+
+#include "MinHeap.cpp"
 

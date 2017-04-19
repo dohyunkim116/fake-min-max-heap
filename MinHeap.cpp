@@ -1,3 +1,6 @@
+#ifndef _MIN_HEAP_CPP_
+#define _MIN_HEAP_CPP_
+
 template <class T>
 MinHeap<T>::MinHeap(int capacity)
   :m_capacity(capacity), m_size(0), m_last(0) {
@@ -6,46 +9,41 @@ MinHeap<T>::MinHeap(int capacity)
 
 template <class T>
 MinHeap<T>::~MinHeap() {
-  delete m_heap;
+  delete [] m_heap;
 }
 
 template <class T>
-int MinHeap<T>::bubbleUp(int empty, T n){
-  if (empty == 1){
-    return empty;
+void MinHeap<T>::bubbleUp(int emptySlot, T n){
+  if (isCeiling(emptySlot)) {
+    m_heap[emptySlot] = n;
+    return;
   }
-  if (m_heap[empty/2] <= n) {
-    return empty;
+  
+  if (m_heap[emptySlot/2] <= n) {
+    m_heap[emptySlot] = n;
   }
   else {
-    m_heap[empty] = m_heap[empty/2];
-    return bubbleUp(empty/2, n);
+    m_heap[emptySlot] = m_heap[emptySlot/2];
+    bubbleUp(emptySlot/2, n);
   }
 }
 
 template <class T>
 void MinHeap<T>::insert(T n){
   ++m_last;
-  if (m_last > m_capacity)
-    throw out_of_range("No room");
-  int empty;
-  if (m_heap[empty/2] > n) {
-    empty = bubbleUp(m_last, n);
-    m_heap[empty] = n;
-  }
-  else {
-    m_heap[m_last] = n;
-  }
   ++m_size;
+  if (m_size > m_capacity)
+    throw out_of_range("No room");
+  bubbleUp(m_last,n);
 }
 
 template <class T>
-void MinHeap<T>::trickleDown(int currIndex, T temp){ 
+void MinHeap<T>::trickleDown(int currIndex, T replacement){ 
   T minChild;
   int minChildIndex;
   
-  if (currIndex*2 > m_last){//at the bottom of heap
-    m_heap[currIndex] = temp;
+  if (isFloor(currIndex)){
+    m_heap[currIndex] = replacement;
     return;
   }
 
@@ -70,13 +68,13 @@ void MinHeap<T>::trickleDown(int currIndex, T temp){
     }  
   }
 
-  if (temp <= minChild) {
-    m_heap[currIndex] = temp;
+  if (replacement <= minChild) {
+    m_heap[currIndex] = replacement;
     return;
   }
 
   m_heap[currIndex] = minChild;  
-  trickleDown(minChildIndex, temp);
+  trickleDown(minChildIndex, replacement);
 }
 
 template <class T>
@@ -84,11 +82,40 @@ int MinHeap<T>::deleteMin(){
   if (m_size == 0) {
     throw out_of_range("0 elements in min heap");
   }
-  T tempTop = m_heap[m_last];
+  T replacement = m_heap[m_last];
   --m_last;
   --m_size;
-  trickleDown(1, tempTop);
+  trickleDown(1, replacement);
 }
+
+
+template <class T>
+void MinHeap<T>::deleteAt(int index){
+  if (m_size == 0){
+    throw out_of_range("0 elements in min heap");
+  }
+  T replacement = m_heap[m_last];
+  --m_last;
+  --m_size;
+  
+  if (index == m_last+1){
+    return;
+  }
+
+  if (isCeiling(index)){
+    trickleDown(index, replacement);
+  }
+  else if (isFloor(index)){
+    bubbleUp(index, replacement);
+  }
+  else if (m_heap[index/2] > replacement){
+    bubbleUp(index, replacement);
+  }
+  else {
+    trickleDown(index, replacement);
+  }
+}
+
 
 
 template <class T>
@@ -101,3 +128,5 @@ void MinHeap<T>::dump(){
          << m_heap[i] << endl;
   }
 }
+
+#endif

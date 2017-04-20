@@ -19,22 +19,25 @@ Heap<T>::Heap(int capacity)
 
 template <typename T>
 Heap<T>::~Heap() {
-  delete m_array;
+  delete [] m_array;
 }
 
 template <typename T>
-void Heap<T>::bubbleUp(int emptyIndex, Element<T> e){
+int Heap<T>::bubbleUp(int emptyIndex, Element<T> e){
   if (isCeiling(emptyIndex)) {
     m_array[emptyIndex] = e;
-    return;
+    return emptyIndex;
   }
 
   if (m_compare(m_array[emptyIndex/2],e)) {
     m_array[emptyIndex] = e;
+    return emptyIndex;
   }
   else {
     m_array[emptyIndex] = m_array[emptyIndex/2];
-    bubbleUp(emptyIndex/2, e);
+    int twinIndex = m_array[emptyIndex].m_twinIndex;
+    m_twin->m_array[twinIndex].m_twinIndex = emptyIndex;
+    return bubbleUp(emptyIndex/2, e);
   }
 }
 
@@ -122,10 +125,19 @@ void MinMaxHeap<T>::insert(const T& data){
   if (m_MinHeapPtr->m_size > m_MinHeapPtr->m_capacity){
     throw out_of_range("Heap is full.");
   }
-  Element<T> newE;
-  newE.m_key = data;
+  Element<T> minElement, maxElement;
+  minElement.m_key = data;
+  maxElement.m_key = data;
 
-  m_MinHeapPtr->bubbleUp(m_MinHeapPtr->m_last, newE); 
+  int minIndex = m_MinHeapPtr->bubbleUp(m_MinHeapPtr->m_last, 
+					minElement);
+  maxElement.m_twinIndex = minIndex;
+
+  m_MaxHeapPtr->m_size++;
+  m_MaxHeapPtr->m_last++;
+  int maxIndex = m_MaxHeapPtr->bubbleUp(m_MaxHeapPtr->m_last,
+					maxElement);
+  m_MaxHeapPtr->m_twin->m_array[minIndex].m_twinIndex = maxIndex;
 }
 
   /*
@@ -154,7 +166,18 @@ void MinMaxHeap<T>::dump(){
 
   for (int i = 1; i <= m_MinHeapPtr->m_last; i++){
     cout << "MinHeap[" << i << "] = "
-         << m_MinHeapPtr->m_array[i].m_key << endl;
+         << '(' << m_MinHeapPtr->m_array[i].m_key << ','
+	 << m_MinHeapPtr->m_array[i].m_twinIndex << ")\n";
+  }
+  cout << endl;
+
+  cout << "size = " << m_MaxHeapPtr->m_size << ", "
+       << "capacity = " << m_MaxHeapPtr->m_capacity << endl;
+
+  for (int i = 1; i <= m_MaxHeapPtr->m_last; i++){
+    cout << "MaxHeap[" << i << "] = "
+         << '(' << m_MaxHeapPtr->m_array[i].m_key << ','
+	 << m_MaxHeapPtr->m_array[i].m_twinIndex << ")\n";
   }
 }
 

@@ -29,7 +29,7 @@ class Heap{
   //Heap(const Heap<T>& other);
   ~Heap();
   //const Heap& operator=(const Heap& rhs);
-  void bubbleUp(int emptyIndex, Element<T> e);
+  int bubbleUp(int emptyIndex, Element<T> e);
   void trickleDown(int currIndex, Element<T> r);
   
   bool isCeiling(int index){return index/2 == 0;}

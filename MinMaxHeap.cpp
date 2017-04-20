@@ -41,14 +41,16 @@ int Heap<T>::bubbleUp(int emptyIndex, Element<T> e){
   }
 }
 
-/*
+
 template <typename T>
-void Heap<T>::trickleDown(int currIndex, Element<T> temp){
+void Heap<T>::trickleDown(int currIndex, Element<T> r){
   Element<T> minChild;
   int minChildIndex;
 
-  if (currIndex*2 > m_last){//at the bottom of heap
-    m_array[currIndex] = temp;
+  if (isFloor(currIndex)){//at the bottom of heap
+    m_array[currIndex] = r;
+    int twinIndex = m_array[currIndex].m_twinindex;
+    m_twin->m_array[twinIndex].m_twinIndex = currIndex;
     return;
   }
 
@@ -61,7 +63,7 @@ void Heap<T>::trickleDown(int currIndex, Element<T> temp){
 
     else {
 
-      if (m_array[currIndex*2] <= m_array[currIndex*2+1]){//pass left and right
+      if (m_compare(m_array[currIndex*2],m_array[currIndex*2+1])){
         minChild = m_array[currIndex*2];
         minChildIndex = currIndex*2;
       }
@@ -73,15 +75,19 @@ void Heap<T>::trickleDown(int currIndex, Element<T> temp){
     }
   }
 
-  if (temp <= minChild) {//pass left and right
-    m_array[currIndex] = temp;
+  if (m_compare(r,minChild)) {
+    m_array[currIndex] = r;
+    int twinIndex = m_array[currIndex].m_twinindex;
+    m_twin->m_array[twinIndex].m_twinIndex = currIndex;
     return;
   }
 
   m_array[currIndex] = minChild;
-  trickleDown(minChildIndex, temp);
+  int twinIndex = m_array[currIndex].m_twinindex;
+  m_twin->m_array[twinIndex].m_twinIndex = currIndex;
+  trickleDown(minChildIndex, r);
 }
-*/
+
 
 template <typename T>
 MinMaxHeap<T>::MinMaxHeap(int capacity){
@@ -140,23 +146,56 @@ void MinMaxHeap<T>::insert(const T& data){
   m_MaxHeapPtr->m_twin->m_array[minIndex].m_twinIndex = maxIndex;
 }
 
-  /*
 template <typename T>
-T MinMaxHeap<T>::deleteMin(){
-    if (m_size == 0) {
-    throw out_of_range("0 elements in min heap");
-  }
-  T tempTop = m_array[m_last];
+void Heap<T>::deleteAt(int index){
+  Element replacement = m_array[m_last];
   --m_last;
   --m_size;
-  trickleDown(1, tempTop);
+
+  if (index == m_last+1){
+    return;
+  }
+
+  if (isCeiling(index)){
+    trickleDown(index, replacement);
+  }
+  else if (isFloor(index)){
+    bubbleUp(index, replacement);
+  }
+  else if (m_compare(replacement,m_array[index/2])){
+    bubbleUp(index, replacement);
+  }
+  else {
+    trickleDown(index, replacement);
+  }
 }
+
+template <typename T>
+T Heap<T>::deleteTop(){
+  if (m_size == 0) {
+    throw out_of_range("0 elements in MinMaxHeap");
+  }
+  Element replacement = m_array[m_last];
+  Element top = m_array[1];
+  --m_last;
+  --m_size;
+  trickleDown(1, replacement);
+  m_twin->deleteAt(top.m_twinIndex);
+  return top.m_key;
+}
+
+template <typename T>
+T MinMaxHeap<T>::deleteMin(){
+  
+}
+
 
 template <typename T>
 T MinMaxHeap<T>::deleteMax(){
 
 }
-  */
+
+
 
 
 template <typename T>

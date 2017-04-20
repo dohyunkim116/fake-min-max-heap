@@ -49,7 +49,7 @@ void Heap<T>::trickleDown(int currIndex, Element<T> r){
 
   if (isFloor(currIndex)){//at the bottom of heap
     m_array[currIndex] = r;
-    int twinIndex = m_array[currIndex].m_twinindex;
+    int twinIndex = m_array[currIndex].m_twinIndex;
     m_twin->m_array[twinIndex].m_twinIndex = currIndex;
     return;
   }
@@ -77,13 +77,13 @@ void Heap<T>::trickleDown(int currIndex, Element<T> r){
 
   if (m_compare(r,minChild)) {
     m_array[currIndex] = r;
-    int twinIndex = m_array[currIndex].m_twinindex;
+    int twinIndex = m_array[currIndex].m_twinIndex;
     m_twin->m_array[twinIndex].m_twinIndex = currIndex;
     return;
   }
 
   m_array[currIndex] = minChild;
-  int twinIndex = m_array[currIndex].m_twinindex;
+  int twinIndex = m_array[currIndex].m_twinIndex;
   m_twin->m_array[twinIndex].m_twinIndex = currIndex;
   trickleDown(minChildIndex, r);
 }
@@ -148,7 +148,7 @@ void MinMaxHeap<T>::insert(const T& data){
 
 template <typename T>
 void Heap<T>::deleteAt(int index){
-  Element replacement = m_array[m_last];
+  Element<T> replacement = m_array[m_last];
   --m_last;
   --m_size;
 
@@ -175,8 +175,8 @@ T Heap<T>::deleteTop(){
   if (m_size == 0) {
     throw out_of_range("0 elements in MinMaxHeap");
   }
-  Element replacement = m_array[m_last];
-  Element top = m_array[1];
+  Element<T> replacement = m_array[m_last];
+  Element<T> top = m_array[1];
   --m_last;
   --m_size;
   trickleDown(1, replacement);
@@ -186,16 +186,13 @@ T Heap<T>::deleteTop(){
 
 template <typename T>
 T MinMaxHeap<T>::deleteMin(){
-  
+  return m_MinHeapPtr->deleteTop();
 }
-
 
 template <typename T>
 T MinMaxHeap<T>::deleteMax(){
-
+  return m_MaxHeapPtr->deleteTop();
 }
-
-
 
 
 template <typename T>

@@ -34,6 +34,7 @@ class Heap{
   void deleteAt(int index);
   T deleteTop();
   
+  void copyHeap(const Heap<T>& other);
   bool isCeiling(int index){return index/2 == 0;}
   bool isFloor(int index){return index*2 > m_last;}
 

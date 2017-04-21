@@ -23,6 +23,21 @@ Heap<T>::~Heap() {
 }
 
 template <typename T>
+void Heap<T>::copyHeap(const Heap<T>& other){
+  m_array = new Element<T>[m_capacity+1];
+  for (int i = 1; i <= m_size; ++i){
+    m_array[i] = other.m_array[i];
+  }
+}
+
+template <typename T>
+Heap<T>::Heap(const Heap<T>& other)
+  : m_capacity(other.m_capacity), m_size(other.m_size), m_last(other.m_last),
+    m_compare(other.m_compare), m_twin(NULL) {
+  copyHeap(other);
+}
+
+template <typename T>
 int Heap<T>::bubbleUp(int emptyIndex, Element<T> e){
   if (isCeiling(emptyIndex)) {
     m_array[emptyIndex] = e;
@@ -40,7 +55,6 @@ int Heap<T>::bubbleUp(int emptyIndex, Element<T> e){
     return bubbleUp(emptyIndex/2, e);
   }
 }
-
 
 template <typename T>
 void Heap<T>::trickleDown(int currIndex, Element<T> r){
@@ -88,7 +102,6 @@ void Heap<T>::trickleDown(int currIndex, Element<T> r){
   trickleDown(minChildIndex, r);
 }
 
-
 template <typename T>
 MinMaxHeap<T>::MinMaxHeap(int capacity){
   m_MinHeapPtr = new Heap<T>(capacity);
@@ -101,7 +114,6 @@ MinMaxHeap<T>::MinMaxHeap(int capacity){
   m_MaxHeapPtr->m_compare = &isGreaterThanEq;
 }
 
-
 template <typename T>
 MinMaxHeap<T>::~MinMaxHeap(){
   delete m_MinHeapPtr;
@@ -110,10 +122,13 @@ MinMaxHeap<T>::~MinMaxHeap(){
   m_MaxHeapPtr = NULL;
 }
 
-
 template <typename T>
 MinMaxHeap<T>::MinMaxHeap(const MinMaxHeap<T>& other){
+  m_MinHeapPtr = new Heap<T>(*other.m_MinHeapPtr);
+  m_MaxHeapPtr = new Heap<T>(*other.m_MaxHeapPtr);
 
+  m_MinHeapPtr->m_twin = m_MaxHeapPtr;
+  m_MaxHeapPtr->m_twin = m_MinHeapPtr;
 }
 
 

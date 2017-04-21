@@ -197,21 +197,25 @@ T MinMaxHeap<T>::deleteMax(){
 
 template <typename T>
 void MinMaxHeap<T>::dump(){
+  cout << "... MinMaxHeap::dump() ..." << endl;
+  cout << endl;
+  cout << "------------Min Heap------------" << endl;
   cout << "size = " << m_MinHeapPtr->m_size << ", "
        << "capacity = " << m_MinHeapPtr->m_capacity << endl;
 
   for (int i = 1; i <= m_MinHeapPtr->m_last; i++){
-    cout << "MinHeap[" << i << "] = "
+    cout << "Heap[" << i << "] = "
          << '(' << m_MinHeapPtr->m_array[i].m_key << ','
 	 << m_MinHeapPtr->m_array[i].m_twinIndex << ")\n";
   }
   cout << endl;
 
+  cout << "------------Min Heap------------" << endl;
   cout << "size = " << m_MaxHeapPtr->m_size << ", "
        << "capacity = " << m_MaxHeapPtr->m_capacity << endl;
 
   for (int i = 1; i <= m_MaxHeapPtr->m_last; i++){
-    cout << "MaxHeap[" << i << "] = "
+    cout << "Heap[" << i << "] = "
          << '(' << m_MaxHeapPtr->m_array[i].m_key << ','
 	 << m_MaxHeapPtr->m_array[i].m_twinIndex << ")\n";
   }

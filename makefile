@@ -9,8 +9,8 @@ test2: MinMaxHeap.h test2.cpp
 	g++ -g MinMaxHeap.h test2.cpp -o test2
 	./test2
 
-test3: MinMaxHeap.h test3.cpp
-	g++ -g MinMaxHeap.h test3.cpp -o test3
+test3: MinMaxHeap.h NoCopyString.h
+	g++ -g test3.cpp NoCopyString.cpp -o test3
 	./test3
 
 test4: MinMaxHeap.h test4.cpp

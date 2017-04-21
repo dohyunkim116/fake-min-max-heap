@@ -224,12 +224,18 @@ void MinMaxHeap<T>::dump(){
 
 template <typename T>
 void MinMaxHeap<T>::locateMin(int pos, T& data, int& index){
+  if (pos > m_MinHeapPtr->m_size || pos < 0) {
+    throw out_of_range("Position is out of bounds.");
+  }
   data = m_MinHeapPtr->m_array[pos].m_key;
   index = m_MinHeapPtr->m_array[pos].m_twinIndex;
 }
 
 template <typename T>
 void MinMaxHeap<T>::locateMax(int pos, T& data, int& index){
+  if (pos > m_MaxHeapPtr->m_size || pos < 0) {
+    throw out_of_range("Position is out of bounds.");
+  }
   data = m_ManHeapPtr->m_array[pos].m_key;
   index = m_MaxHeapPtr->m_array[pos].m_twinIndex;
 }

@@ -26,7 +26,7 @@ class Heap{
 
  private:
   Heap(int capacity = 0);
-  //Heap(const Heap<T>& other);
+  Heap(const Heap<T>& other);
   ~Heap();
   //const Heap& operator=(const Heap& rhs);
   int bubbleUp(int emptyIndex, Element<T> e);
@@ -50,8 +50,8 @@ template <typename T>
 class MinMaxHeap {
  public:
   MinMaxHeap(int capacity = 0);
-  //MinMaxHeap(const MinMaxHeap<T>& other);
-  //~MinMaxHeap();
+  ~MinMaxHeap();
+  MinMaxHeap(const MinMaxHeap<T>& other);
   //const MinMaxHeap<T>& operator=(cost MinMaxHeap<T>& rhs);
   int size();
   void insert(const T& data);

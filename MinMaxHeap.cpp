@@ -101,22 +101,27 @@ MinMaxHeap<T>::MinMaxHeap(int capacity){
   m_MaxHeapPtr->m_compare = &isGreaterThanEq;
 }
 
-/*
+
+template <typename T>
+MinMaxHeap<T>::~MinMaxHeap(){
+  delete m_MinHeapPtr;
+  m_MinHeapPtr = NULL;
+  delete m_MaxHeapPtr;
+  m_MaxHeapPtr = NULL;
+}
+
+
 template <typename T>
 MinMaxHeap<T>::MinMaxHeap(const MinMaxHeap<T>& other){
 
 }
 
 
-template <typename T>
-MinMaxHeap<T>::~MinMaxHeap(){
+//template <typename T>
+//const MinMaxHeap<T>& MinMaxHeap<T>::operator=(const MinMaxHeap<T>& rhs){
+//}
 
-}
 
-template <typename T>
-const MinMaxHeap<T>& MinMaxHeap<T>::operator=(const MinMaxHeap<T>& rhs){
-}
-*/
 
 template <typename T>
 int MinMaxHeap<T>::size(){

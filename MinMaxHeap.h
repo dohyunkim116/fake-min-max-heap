@@ -58,8 +58,8 @@ class MinMaxHeap {
   T deleteMin();
   T deleteMax();
   void dump();
-  //void locateMin(int pos, T& data, int& index);
-  //void locateMax(int pos, T& data, int& index);
+  void locateMin(int pos, T& data, int& index);
+  void locateMax(int pos, T& data, int& index);
 
  private:
   Heap<T>* m_MinHeapPtr;

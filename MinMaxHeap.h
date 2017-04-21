@@ -28,7 +28,7 @@ class Heap{
   Heap(int capacity = 0);
   Heap(const Heap<T>& other);
   ~Heap();
-  //const Heap& operator=(const Heap& rhs);
+  const Heap<T>& operator=(const Heap<T>& rhs);
   int bubbleUp(int emptyIndex, Element<T> e);
   void trickleDown(int currIndex, Element<T> r);
   void deleteAt(int index);
@@ -53,7 +53,7 @@ class MinMaxHeap {
   MinMaxHeap(int capacity = 0);
   ~MinMaxHeap();
   MinMaxHeap(const MinMaxHeap<T>& other);
-  //const MinMaxHeap<T>& operator=(cost MinMaxHeap<T>& rhs);
+  const MinMaxHeap<T>& operator=(const MinMaxHeap<T>& rhs);
   int size();
   void insert(const T& data);
   T deleteMin();

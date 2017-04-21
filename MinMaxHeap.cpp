@@ -20,6 +20,7 @@ Heap<T>::Heap(int capacity)
 template <typename T>
 Heap<T>::~Heap() {
   delete [] m_array;
+  m_array = NULL;
 }
 
 template <typename T>
@@ -35,6 +36,19 @@ Heap<T>::Heap(const Heap<T>& other)
   : m_capacity(other.m_capacity), m_size(other.m_size), m_last(other.m_last),
     m_compare(other.m_compare), m_twin(NULL) {
   copyHeap(other);
+}
+
+template <typename T>
+const Heap<T>& Heap<T>::operator=(const Heap<T>& rhs){
+  if (this == &rhs){
+    return rhs;
+  }
+  this->~Heap();
+  m_capacity = rhs.m_capacity;
+  m_size = rhs.m_size;
+  m_last = rhs.m_last;
+  m_compare = rhs.m_compare;
+  copyHeap(rhs);
 }
 
 template <typename T>
@@ -132,9 +146,14 @@ MinMaxHeap<T>::MinMaxHeap(const MinMaxHeap<T>& other){
 }
 
 
-//template <typename T>
-//const MinMaxHeap<T>& MinMaxHeap<T>::operator=(const MinMaxHeap<T>& rhs){
-//}
+template <typename T>
+const MinMaxHeap<T>& MinMaxHeap<T>::operator=(const MinMaxHeap<T>& rhs){
+  if (this == &rhs){
+    return rhs;
+  }
+  *m_MinHeapPtr = *rhs.m_MinHeapPtr;
+  *m_MaxHeapPtr = *rhs.m_MaxHeapPtr;
+}
 
 
 

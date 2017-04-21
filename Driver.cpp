@@ -17,14 +17,17 @@ int main(){
   H.dump();
   cout << endl;
 
-  cout << "Dump after Delete Max" << endl;
-  H.deleteMax();
-  H.dump();
+  cout << "Construct G using using H, and dump" << endl;
+  MinMaxHeap<int> G(H);
+  G.dump();
   cout << endl;
 
-  cout << "Dump after Delete Min" << endl;
-  H.deleteMin();
-  H.dump();
+  MinMaxHeap<int> K(0);
+  cout << "Construct K with no capacity" << endl;
+  
+  cout << "\nAssign G to K, and dump" << endl;
+  K = G;
+  K.dump();
   cout << endl;
 
 }

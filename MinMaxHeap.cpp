@@ -160,10 +160,14 @@ void Heap<T>::deleteAt(int index){
     trickleDown(index, replacement);
   }
   else if (isFloor(index)){
-    bubbleUp(index, replacement);
+    int newIndex = bubbleUp(index, replacement);
+    int twinIndex = m_array[newIndex].m_twinIndex;
+    m_twin->m_array[twinIndex].m_twinIndex = newIndex;
   }
   else if (m_compare(replacement,m_array[index/2])){
-    bubbleUp(index, replacement);
+    int newIndex = bubbleUp(index, replacement);
+    int twinIndex = m_array[newIndex].m_twinIndex;
+    m_twin->m_array[twinIndex].m_twinIndex = newIndex;
   }
   else {
     trickleDown(index, replacement);
@@ -197,9 +201,10 @@ T MinMaxHeap<T>::deleteMax(){
 
 template <typename T>
 void MinMaxHeap<T>::dump(){
-  cout << "... MinMaxHeap::dump() ..." << endl;
-  cout << endl;
-  cout << "------------Min Heap------------" << endl;
+
+  cout << "\n... MinMaxHeap::dump() ..." << endl;
+
+  cout << "\n------------Min Heap------------" << endl;
   cout << "size = " << m_MinHeapPtr->m_size << ", "
        << "capacity = " << m_MinHeapPtr->m_capacity << endl;
 
@@ -208,9 +213,8 @@ void MinMaxHeap<T>::dump(){
          << '(' << m_MinHeapPtr->m_array[i].m_key << ','
 	 << m_MinHeapPtr->m_array[i].m_twinIndex << ")\n";
   }
-  cout << endl;
 
-  cout << "------------Min Heap------------" << endl;
+  cout << "\n------------Max Heap------------" << endl;
   cout << "size = " << m_MaxHeapPtr->m_size << ", "
        << "capacity = " << m_MaxHeapPtr->m_capacity << endl;
 
@@ -219,12 +223,13 @@ void MinMaxHeap<T>::dump(){
          << '(' << m_MaxHeapPtr->m_array[i].m_key << ','
 	 << m_MaxHeapPtr->m_array[i].m_twinIndex << ")\n";
   }
+  cout << "--------------------------------\n" << endl;
 }
 
 
 template <typename T>
 void MinMaxHeap<T>::locateMin(int pos, T& data, int& index){
-  if (pos > m_MinHeapPtr->m_size || pos < 0) {
+  if (pos > m_MinHeapPtr->m_size || pos < 1) {
     throw out_of_range("Position is out of bounds.");
   }
   data = m_MinHeapPtr->m_array[pos].m_key;
@@ -233,7 +238,7 @@ void MinMaxHeap<T>::locateMin(int pos, T& data, int& index){
 
 template <typename T>
 void MinMaxHeap<T>::locateMax(int pos, T& data, int& index){
-  if (pos > m_MaxHeapPtr->m_size || pos < 0) {
+  if (pos > m_MaxHeapPtr->m_size || pos < 1) {
     throw out_of_range("Position is out of bounds.");
   }
   data = m_MaxHeapPtr->m_array[pos].m_key;

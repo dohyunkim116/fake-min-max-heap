@@ -52,6 +52,12 @@ const Heap<T>& Heap<T>::operator=(const Heap<T>& rhs){
 }
 
 template <typename T>
+void Heap<T>::updateTwinIndex(int index){
+  int twinIndex = m_array[index].m_twinIndex;
+  m_twin->m_array[twinIndex].m_twinIndex = index;
+}
+
+template <typename T>
 int Heap<T>::bubbleUp(int emptyIndex, Element<T> e){
   if (isCeiling(emptyIndex)) {
     m_array[emptyIndex] = e;
@@ -64,8 +70,7 @@ int Heap<T>::bubbleUp(int emptyIndex, Element<T> e){
   }
   else {
     m_array[emptyIndex] = m_array[emptyIndex/2];
-    int twinIndex = m_array[emptyIndex].m_twinIndex;
-    m_twin->m_array[twinIndex].m_twinIndex = emptyIndex;
+    updateTwinIndex(emptyIndex);
     return bubbleUp(emptyIndex/2, e);
   }
 }
@@ -77,8 +82,7 @@ void Heap<T>::trickleDown(int currIndex, Element<T> r){
 
   if (isFloor(currIndex)){//at the bottom of heap
     m_array[currIndex] = r;
-    int twinIndex = m_array[currIndex].m_twinIndex;
-    m_twin->m_array[twinIndex].m_twinIndex = currIndex;
+    updateTwinIndex(currIndex);
     return;
   }
 
@@ -105,14 +109,12 @@ void Heap<T>::trickleDown(int currIndex, Element<T> r){
 
   if (m_compare(r,minChild)) {
     m_array[currIndex] = r;
-    int twinIndex = m_array[currIndex].m_twinIndex;
-    m_twin->m_array[twinIndex].m_twinIndex = currIndex;
+    updateTwinIndex(currIndex);
     return;
   }
 
   m_array[currIndex] = minChild;
-  int twinIndex = m_array[currIndex].m_twinIndex;
-  m_twin->m_array[twinIndex].m_twinIndex = currIndex;
+  updateTwinIndex(currIndex);
   trickleDown(minChildIndex, r);
 }
 
@@ -200,13 +202,11 @@ void Heap<T>::deleteAt(int index){
   }
   else if (isFloor(index)){
     int newIndex = bubbleUp(index, replacement);
-    int twinIndex = m_array[newIndex].m_twinIndex;
-    m_twin->m_array[twinIndex].m_twinIndex = newIndex;
+    updateTwinIndex(newIndex);
   }
   else if (m_compare(replacement,m_array[index/2])){
     int newIndex = bubbleUp(index, replacement);
-    int twinIndex = m_array[newIndex].m_twinIndex;
-    m_twin->m_array[twinIndex].m_twinIndex = newIndex;
+    updateTwinIndex(newIndex);
   }
   else {
     trickleDown(index, replacement);

@@ -37,7 +37,7 @@ class Heap{
   void copyHeap(const Heap<T>& other);
   bool isCeiling(int index){return index/2 == 0;}
   bool isFloor(int index){return index*2 > m_last;}
-
+  void updateTwinIndex(int index);
 
   int m_capacity;
   int m_size;

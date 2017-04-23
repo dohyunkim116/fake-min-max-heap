@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string.h>
 #include <stdlib.h>
+#include <stdexcept>
 #include "MinMaxHeap.h"
 using namespace std ;
 
@@ -291,6 +292,80 @@ int main() {
   sanityCheck(H3) ;
   cout << endl;
 
-  cout << "Test A: Checks for out-of-bounds exception handling" << endl;  
+  cout << "*********************************************************\n"
+       << "** Test A: Checks for out-of-bounds exception handling **\n"  
+       << "*********************************************************\n";
+    
+  MinMaxHeap<int> K1(1);
+  MinMaxHeap<string> K2(1);
+
+  cout << "(a) MinMaxHeap<int> object with capcity 1:" << endl;
+  cout << "\nDump empty heap..." << endl;
+  K1.dump();
+
+  cout << "Delete Min..." << endl;
+  try {
+    K1.deleteMin();
+  }
+  catch (out_of_range e){
+    cout << e.what() << endl;
+  }
+  cout << "Delete Max..." << endl;
+  try {
+    K1.deleteMax();
+  }
+  catch (out_of_range e){
+    cout << e.what() << endl;
+  }
+  cout << "\nDump heap after deletes..." << endl;
+  K1.dump();
+  
+  cout << "Insert 1...\n";
+  K1.insert(1);
+  cout << "Insert 2...\n";
+  try {
+    K1.insert(2);
+  }
+  catch (out_of_range e){
+    cout << e.what() << endl;
+  }
+  cout << "\nDump heap after inserts..." << endl;
+  K1.dump();
+  cout << endl;
+
+  cout << "(b) MinMaxHeap<string> object with capcity 1:" << endl;
+  cout << "\nDump empty heap..." << endl;
+  K2.dump();
+
+  cout << "Delete Min..." << endl;
+  try {
+    K2.deleteMin();
+  }
+  catch (out_of_range e){
+    cout << e.what() << endl;
+  }
+  
+  cout << "Delete Max..." << endl;
+  try {
+    K2.deleteMax();
+  }
+  catch (out_of_range e){
+    cout << e.what() << endl;
+  }
+  cout << "\nDump heap after deletes..." << endl;
+  K2.dump();
+  
+  cout << "Insert 'first'...\n";
+  K2.insert("first");
+  cout << "Insert 'second'...\n";
+  try {
+    K2.insert("second");
+  }
+  catch (out_of_range e){
+    cout << e.what() << endl;
+  }
+  cout << "\nDump heap after inserts..." << endl;
+  K2.dump();
+  cout << endl;
 
 }

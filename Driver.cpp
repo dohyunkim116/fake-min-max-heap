@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdexcept>
 #include "MinMaxHeap.h"
+#include <set>
 using namespace std ;
 
 //sanityCheck: provided by Dr. Chang
@@ -120,6 +121,152 @@ void sanityCheck(MinMaxHeap<T>& H) {
   } else {
     cout << "*** Failed sanityCheck().\n" ;
   }
+}
+
+//checkAgainstSet (for MinHeap): provided by Dr. Chang
+template <typename T>
+void checkAgainstSet(MinMaxHeap<T>& H, multiset<T>& origS) {
+  multiset<T> S ;  
+  typename multiset<T>::iterator it ;
+
+  int n = H.size() ;
+  int pos ;
+  int key ;
+
+  bool passed = true ;
+
+  S = origS ;  // make copy
+
+  if ( n != S.size() ) {
+    passed = false ;
+    cout << "Heap and multiset sizes do not match!\n" ;
+    cout << "   Heap size = " << n << endl ;
+    cout << "   Set size  = " << S.size() << endl ;
+  }
+
+
+  for (int i=1 ; i <= n ; i++) {
+    H.locateMin(i,key,pos) ;
+    it = S.find(key) ;
+    if (it == S.end()) {
+      passed = false ;
+      cout << "Key " << key << " in the min-heap but not in the multiset.\n" ;
+    } else {
+      S.erase(it) ;
+    }
+  }
+
+  if (S.size() > 0) {
+    cout << "There are " << S.size() 
+	 << " items in multiset that not in the min-heap.\n" ;
+    for (it=S.begin() ; it != S.end() ; it++) {
+      cout << *it << " " ;
+    }
+    cout << endl ;
+  }
+
+
+  S = origS ;  // start over
+
+  for (int i=1 ; i <= n ; i++) {
+    H.locateMax(i,key,pos) ;
+    it = S.find(key) ;
+    if (it == S.end()) {
+      passed = false ;
+      cout << "Key " << key << " in the max-heap but not in the multiset.\n" ;
+    } else {
+      S.erase(it) ;
+    }
+  }
+
+  if (S.size() > 0) {
+    cout << "There are " << S.size() 
+	 << " items in multiset that not in the max-heap.\n" ;
+    for (it=S.begin() ; it != S.end() ; it++) {
+      cout << *it << " " ;
+    }
+    cout << endl ;
+  }
+
+  if (passed) {
+    cout << "Passed check against multiset\n" ;
+  } else {
+    cout << "***Failed check against multiset\n" ;
+  }
+
+}
+
+//checkAgainstSet(for MaxHeap): provided by Dr. Chang
+template <typename T>
+void checkAgainstSet(MinMaxHeap<T>& H, multiset<T,greater<T> >& origS) {
+  multiset<T,greater<T> > S ;  
+  typename multiset<T,greater<T> >::iterator it ;
+
+  int n = H.size() ;
+  int pos ;
+  int key ;
+
+  bool passed = true ;
+
+  S = origS ;  // make copy
+
+  if ( n != S.size() ) {
+    passed = false ;
+    cout << "Heap and multiset sizes do not match!\n" ;
+    cout << "   Heap size = " << n << endl ;
+    cout << "   Set size  = " << S.size() << endl ;
+  }
+
+
+  for (int i=1 ; i <= n ; i++) {
+    H.locateMin(i,key,pos) ;
+    it = S.find(key) ;
+    if (it == S.end()) {
+      passed = false ;
+      cout << "Key " << key << " in the min-heap but not in the multiset.\n" ;
+    } else {
+      S.erase(it) ;
+    }
+  }
+
+  if (S.size() > 0) {
+    cout << "There are " << S.size() 
+	 << " items in multiset that not in the min-heap.\n" ;
+    for (it=S.begin() ; it != S.end() ; it++) {
+      cout << *it << " " ;
+    }
+    cout << endl ;
+  }
+
+
+  S = origS ;  // start over
+
+  for (int i=1 ; i <= n ; i++) {
+    H.locateMax(i,key,pos) ;
+    it = S.find(key) ;
+    if (it == S.end()) {
+      passed = false ;
+      cout << "Key " << key << " in the max-heap but not in the multiset.\n" ;
+    } else {
+      S.erase(it) ;
+    }
+  }
+
+  if (S.size() > 0) {
+    cout << "There are " << S.size() 
+	 << " items in multiset that not in the max-heap.\n" ;
+    for (it=S.begin() ; it != S.end() ; it++) {
+      cout << *it << " " ;
+    }
+    cout << endl ;
+  }
+
+  if (passed) {
+    cout << "Passed check against multiset\n" ;
+  } else {
+    cout << "***Failed check against multiset\n" ;
+  }
+
 }
 
 //NoCopyString class provided by Dr. Chang
@@ -292,9 +439,9 @@ int main() {
   sanityCheck(H3) ;
   cout << endl;
 
-  cout << "*********************************************************\n"
-       << "** Test A: Checks for out-of-bounds exception handling **\n"  
-       << "*********************************************************\n";
+  cout << "********************************************************\n"
+       << "** Test A: Checks for out-of-range exception handling **\n"  
+       << "********************************************************\n";
     
   MinMaxHeap<int> K1(1);
   MinMaxHeap<string> K2(1);
@@ -367,5 +514,87 @@ int main() {
   cout << "\nDump heap after inserts..." << endl;
   K2.dump();
   cout << endl;
+
+  cout << "**********************************" << endl;
+  cout << "** Test 4 provided by Dr. Chang **" << endl;
+  cout << "**********************************" << endl;
+
+  srand(4178012351) ;
+
+  MinMaxHeap<int> H4(1000) ;
+  multiset<int> S4 ;
+  //multiset<int>::iterator it4 ;
+  int key4 ;
+  bool passed4 ;
+
+  for (int i=0 ; i < 500 ; i++) {
+    key4 = rand() % 100 ;
+    H4.insert(key4) ;
+    S4.insert(key4) ;
+  }
+  sanityCheck(H4) ;
+  checkAgainstSet(H4,S4) ;
+
+  passed4 = true ;
+  for (int i=0 ; i < 450 ; i++) {
+    key4 = H4.deleteMin() ;
+    if (key4 != *S4.begin()) {
+      passed4 = false ;
+      cout << "deleteMin() returns key that is not the smallest key!\n" ;
+    } else {
+      S4.erase(S4.begin()) ;
+    }
+  }
+
+  sanityCheck(H4) ;
+
+  if (passed4) {
+    checkAgainstSet(H4,S4) ;
+  } else {
+    cout << "***Failed deleteMin() test!\n" ;
+    cout << "Skipped check against multiset\n" ;
+  }
+  cout << endl;
+
+  cout << "**********************************" << endl;
+  cout << "** Test 5 provided by Dr. Chang **" << endl;
+  cout << "**********************************" << endl;
+
+  MinMaxHeap<int> H5(1000) ;
+  multiset<int,greater<int> > S5 ;
+  //multiset<int,greater<int> >::iterator it5 ;
+  int key5 ;
+  bool passed5 ;
+
+  for (int i=0 ; i < 750 ; i++) {
+    key5 = rand() % 100 ;
+    H5.insert(key5) ;
+    S5.insert(key5) ;
+  }
+  sanityCheck(H5) ;
+  checkAgainstSet(H5,S5) ;
+
+  passed5 = true ;
+  for (int i=0 ; i < 400 ; i++) {
+    key5 = H5.deleteMax() ;
+    if (key5 != *S5.begin()) {
+      passed5 = false ;
+      cout << "deleteMax() returns key that is not the largest key!\n" ;
+    } else {
+      S5.erase(S5.begin()) ;
+    }
+  }
+
+  sanityCheck(H5) ;
+
+  if (passed5) {
+    checkAgainstSet(H5,S5) ;
+  } else {
+    cout << "***Failed deleteMax() test!\n" ;
+    cout << "Skipped check against multiset\n" ;
+  }
+  
+
+  return 0;
 
 }

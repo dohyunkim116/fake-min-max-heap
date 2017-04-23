@@ -167,11 +167,11 @@ int MinMaxHeap<T>::size(){
 
 template <typename T>
 void MinMaxHeap<T>::insert(const T& data){
-  m_MinHeapPtr->m_size++;
-  m_MinHeapPtr->m_last++;
-  if (m_MinHeapPtr->m_size > m_MinHeapPtr->m_capacity){
+  if (m_MinHeapPtr->m_size+1 > m_MinHeapPtr->m_capacity){
     throw out_of_range("Heap is full.");
   }
+  m_MinHeapPtr->m_size++;
+  m_MinHeapPtr->m_last++;
   Element<T> minElement, maxElement;
   minElement.m_key = data;
   maxElement.m_key = data;

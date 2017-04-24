@@ -36,13 +36,13 @@ class Heap{
   
   void copyHeap(const Heap<T>& other);
   bool isCeiling(int index){return index/2 == 0;}
-  bool isFloor(int index){return index*2 > m_last;}
+  bool isFloor(int index){return index*2 > m_size;}
   void updateTwinIndex(int index);
 
   int m_capacity;
   int m_size;
   Element<T>* m_array;
-  int m_last;
+  //int m_last;
   Heap* m_twin;
   typename FunctionPtr<T>::compare_op m_compare;
 };  

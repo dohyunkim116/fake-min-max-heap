@@ -13,7 +13,7 @@ static bool isGreaterThanEq(const Element<T> lhs, const Element<T> rhs){
 
 template <typename T>
 Heap<T>::Heap(int capacity)
-  :m_capacity(capacity), m_size(0), m_last(0) {
+  :m_capacity(capacity), m_size(0) {
   m_array = new Element<T>[m_capacity+1];
 }
 
@@ -33,7 +33,7 @@ void Heap<T>::copyHeap(const Heap<T>& other){
 
 template <typename T>
 Heap<T>::Heap(const Heap<T>& other)
-  : m_capacity(other.m_capacity), m_size(other.m_size), m_last(other.m_last),
+  : m_capacity(other.m_capacity), m_size(other.m_size),
     m_compare(other.m_compare), m_twin(NULL) {
   copyHeap(other);
 }
@@ -46,7 +46,6 @@ const Heap<T>& Heap<T>::operator=(const Heap<T>& rhs){
   this->~Heap();
   m_capacity = rhs.m_capacity;
   m_size = rhs.m_size;
-  m_last = rhs.m_last;
   m_compare = rhs.m_compare;
   copyHeap(rhs);
 }
@@ -88,9 +87,9 @@ void Heap<T>::trickleDown(int currIndex, Element<T> r){
 
   else {
 
-    if (currIndex*2 == m_last){
-      minChild = m_array[m_last];
-      minChildIndex = m_last;
+    if (currIndex*2 == m_size){
+      minChild = m_array[m_size];
+      minChildIndex = m_size;
     }
 
     else {
@@ -171,29 +170,26 @@ void MinMaxHeap<T>::insert(const T& data){
     throw out_of_range("Heap is full.");
   }
   m_MinHeapPtr->m_size++;
-  m_MinHeapPtr->m_last++;
   Element<T> minElement, maxElement;
   minElement.m_key = data;
   maxElement.m_key = data;
 
-  int minIndex = m_MinHeapPtr->bubbleUp(m_MinHeapPtr->m_last, 
+  int minIndex = m_MinHeapPtr->bubbleUp(m_MinHeapPtr->m_size, 
 					minElement);
   maxElement.m_twinIndex = minIndex;
 
   m_MaxHeapPtr->m_size++;
-  m_MaxHeapPtr->m_last++;
-  int maxIndex = m_MaxHeapPtr->bubbleUp(m_MaxHeapPtr->m_last,
+  int maxIndex = m_MaxHeapPtr->bubbleUp(m_MaxHeapPtr->m_size,
 					maxElement);
   m_MaxHeapPtr->m_twin->m_array[minIndex].m_twinIndex = maxIndex;
 }
 
 template <typename T>
 void Heap<T>::deleteAt(int index){
-  Element<T> replacement = m_array[m_last];
-  --m_last;
+  Element<T> replacement = m_array[m_size];
   --m_size;
 
-  if (index == m_last+1){
+  if (index == m_size+1){
     return;
   }
 
@@ -218,9 +214,8 @@ T Heap<T>::deleteTop(){
   if (m_size == 0) {
     throw out_of_range("0 elements in MinMaxHeap");
   }
-  Element<T> replacement = m_array[m_last];
+  Element<T> replacement = m_array[m_size];
   Element<T> top = m_array[1];
-  --m_last;
   --m_size;
   trickleDown(1, replacement);
   m_twin->deleteAt(top.m_twinIndex);
@@ -247,7 +242,7 @@ void MinMaxHeap<T>::dump(){
   cout << "size = " << m_MinHeapPtr->m_size << ", "
        << "capacity = " << m_MinHeapPtr->m_capacity << endl;
 
-  for (int i = 1; i <= m_MinHeapPtr->m_last; i++){
+  for (int i = 1; i <= m_MinHeapPtr->m_size; i++){
     cout << "Heap[" << i << "] = "
          << '(' << m_MinHeapPtr->m_array[i].m_key << ','
 	 << m_MinHeapPtr->m_array[i].m_twinIndex << ")\n";
@@ -257,7 +252,7 @@ void MinMaxHeap<T>::dump(){
   cout << "size = " << m_MaxHeapPtr->m_size << ", "
        << "capacity = " << m_MaxHeapPtr->m_capacity << endl;
 
-  for (int i = 1; i <= m_MaxHeapPtr->m_last; i++){
+  for (int i = 1; i <= m_MaxHeapPtr->m_size; i++){
     cout << "Heap[" << i << "] = "
          << '(' << m_MaxHeapPtr->m_array[i].m_key << ','
 	 << m_MaxHeapPtr->m_array[i].m_twinIndex << ")\n";

@@ -443,50 +443,50 @@ int main() {
        << "** Test A: Checks for out-of-range exception handling **\n"  
        << "********************************************************\n";
     
-  MinMaxHeap<int> K1(1);
-  MinMaxHeap<string> K2(1);
+  MinMaxHeap<int> Q1(1);
+  MinMaxHeap<string> Q2(1);
 
   cout << "(a) MinMaxHeap<int> object with capcity 1:" << endl;
   cout << "\nDump empty heap..." << endl;
-  K1.dump();
+  Q1.dump();
 
   cout << "Delete Min..." << endl;
   try {
-    K1.deleteMin();
+    Q1.deleteMin();
   }
   catch (out_of_range e){
     cout << e.what() << endl;
   }
   cout << "Delete Max..." << endl;
   try {
-    K1.deleteMax();
+    Q1.deleteMax();
   }
   catch (out_of_range e){
     cout << e.what() << endl;
   }
   cout << "\nDump heap after deletes..." << endl;
-  K1.dump();
+  Q1.dump();
   
   cout << "Insert 1...\n";
-  K1.insert(1);
+  Q1.insert(1);
   cout << "Insert 2...\n";
   try {
-    K1.insert(2);
+    Q1.insert(2);
   }
   catch (out_of_range e){
     cout << e.what() << endl;
   }
   cout << "\nDump heap after inserts..." << endl;
-  K1.dump();
+  Q1.dump();
   cout << endl;
 
   cout << "(b) MinMaxHeap<string> object with capcity 1:" << endl;
   cout << "\nDump empty heap..." << endl;
-  K2.dump();
+  Q2.dump();
 
   cout << "Delete Min..." << endl;
   try {
-    K2.deleteMin();
+    Q2.deleteMin();
   }
   catch (out_of_range e){
     cout << e.what() << endl;
@@ -494,25 +494,25 @@ int main() {
   
   cout << "Delete Max..." << endl;
   try {
-    K2.deleteMax();
+    Q2.deleteMax();
   }
   catch (out_of_range e){
     cout << e.what() << endl;
   }
   cout << "\nDump heap after deletes..." << endl;
-  K2.dump();
+  Q2.dump();
   
   cout << "Insert 'first'...\n";
-  K2.insert("first");
+  Q2.insert("first");
   cout << "Insert 'second'...\n";
   try {
-    K2.insert("second");
+    Q2.insert("second");
   }
   catch (out_of_range e){
     cout << e.what() << endl;
   }
   cout << "\nDump heap after inserts..." << endl;
-  K2.dump();
+  Q2.dump();
   cout << endl;
 
   cout << "**********************************" << endl;
@@ -593,7 +593,223 @@ int main() {
     cout << "***Failed deleteMax() test!\n" ;
     cout << "Skipped check against multiset\n" ;
   }
+  cout << endl;
   
+  cout << "**********************************" << endl;
+  cout << "** Test 6 provided by Dr. Chang **" << endl;
+  cout << "**********************************" << endl;
+
+  MinMaxHeap<int> H6(25) ;
+  H6.insert(5) ;
+  H6.insert(10) ;
+  H6.insert(7) ;
+  H6.insert(9) ;
+  H6.insert(6) ;
+  H6.insert(2) ;
+  H6.insert(16) ;
+  H6.insert(12) ;
+  H6.insert(11) ;
+
+  cout << "Initial MinMax Heap\n" ;
+  H6.dump() ;
+  sanityCheck(H6) ;
+
+  MinMaxHeap<int> *Gptr = new MinMaxHeap<int>(H6) ;
+  cout << "copied MinMax Heap\n" ;
+  Gptr->dump();
+
+  H6.deleteMax() ;
+  Gptr->deleteMin() ;
+  cout << "\nH6 and *Gptr after deleteMax and deleteMin\n" ;
+  sanityCheck(H6) ;
+  sanityCheck(*Gptr) ;
+
+  delete Gptr ;
+
+  cout << "\nH6 after Gptr deleted\n" ;
+  H6.deleteMin() ;
+  H6.deleteMax() ;
+  sanityCheck(H6) ;
+
+  MinMaxHeap<int> K1(11) ;
+  K1.insert(29) ;
+  K1.insert(24) ;
+  K1.insert(23) ;
+  K1.insert(22) ;
+  K1.insert(28) ;
+  K1.insert(26) ;
+  K1.insert(30) ;
+  K1.insert(21) ;
+  K1.insert(25) ;
+  K1.insert(27) ;
+
+  cout << "\nK1 after inserts\n" ;
+  sanityCheck(K1) ;
+
+  MinMaxHeap<int> K2(4) ;
+  K2.insert(43) ;
+  K2.insert(42) ;
+  K2.insert(44) ;
+  K2.insert(41) ;
+
+  cout << "\nK2 after inserts\n" ;
+  sanityCheck(K2) ;
+
+  K2 = K1 ;
+  K1.deleteMax() ;
+  K2.insert(57) ;
+
+  cout << "\nK1 & K2 after assignment, etc...\n" ;
+  sanityCheck(K1) ;
+  sanityCheck(K2) ;
+  cout << endl;
+
+  cout << "*********************************************\n"
+       << "** Test B: Checks for Heap with Capacity 0 **\n"  
+       << "*********************************************\n";
+
+  MinMaxHeap<int> P1(0);
+
+  cout << "(a) MinMaxHeap<int> P1 with capcity 0:" << endl;
+  cout << "\nDump P1..." << endl;
+  P1.dump();
+
+  cout << "Insert 1..." << endl;
+  try {
+    P1.insert(1);
+  }
+  catch (out_of_range e){
+    cout << e.what() << endl;
+  }
+  cout << "Delete Min..." << endl;
+  try {
+    P1.deleteMin();
+  }
+  catch (out_of_range e){
+    cout << e.what() << endl;
+  }
+  cout << "Delete Max..." << endl;
+  try {
+    P1.deleteMax();
+  }
+  catch (out_of_range e){
+    cout << e.what() << endl;
+  }
+  cout << "\nDump heap after deletes..." << endl;
+  P1.dump();
+  cout << endl;
+  
+  cout << "(b) Copy Construct MinMaxHeap<int> with P1:" << endl;
+
+  MinMaxHeap<int>* p2Ptr = new MinMaxHeap<int>(P1);
+
+  cout << "\nDump copy constructed MinMaxHeap<int>..." << endl;
+  p2Ptr->dump();
+
+  cout << "Insert 1 to copy constructed MinMaxHeap<int>..." << endl;
+  try {
+    p2Ptr->insert(1);
+  }
+  catch (out_of_range e){
+    cout << e.what() << endl;
+  }
+  cout << endl;
+
+  cout << "(c) Construct MinMaxHeap<int> P3 with capcaity 3:" << endl;
+  MinMaxHeap<int> P3(3);
+  cout << "\nInsert 1, 2, 3..." << endl;
+  P3.insert(1); P3.insert(2); P3.insert(3);
+  cout << "\nDump heap after inserts..." << endl;
+  P3.dump();
+
+  cout << "Assign copy constructed object with capcity 0 to P3...\n";
+  P3 = *p2Ptr;
+  cout << "Dump updated P3..." << endl;
+  P3.dump();
+
+  cout << "Insert 1..." << endl;
+  try {
+    P3.insert(1);
+  }
+  catch (out_of_range e){
+    cout << e.what() << endl;
+  }
+  cout << "Delete Min..." << endl;
+  try {
+    P3.deleteMin();
+  }
+  catch (out_of_range e){
+    cout << e.what() << endl;
+  }
+  cout << "Delete Max..." << endl;
+  try {
+    P3.deleteMax();
+  }
+  catch (out_of_range e){
+    cout << e.what() << endl;
+  }
+  cout << "\nDump heap after deletes..." << endl;
+  P3.dump();
+  
+  cout << "(d) Destory copy constructed object, "
+       << "and dump P1 and P3:" << endl;
+
+  delete p2Ptr;  
+  cout << "Dump P1..." << endl; P1.dump();
+  cout << "Dump P3..." << endl; P3.dump();
+  cout << endl;
+
+  cout << "******************************************************\n"
+       << "** Test C: Checks for Large Heap Inserts and Deletes**\n"  
+       << "******************************************************\n";
+  cout << "NOTE: takes a long time if run with valgrind, so might \n"
+       << "want to comment Test C out if necessary\n";
+
+  cout << "\nConstruct MinMaxHeap<int> with capacity 1 million...";
+  cout << "\nInsert 1 million integers..." << endl;
+  MinMaxHeap<int> largeInt(1000000);
+  for (int i = 1; i <= 1000000; ++i){
+    largeInt.insert(i);
+  }
+  cout << "Sanity Check after inserts:" << endl;
+  sanityCheck(largeInt);
+
+  cout << "\nDelete Max 0.5 million integers..." << endl;
+  for (int i = 1000000; i >= 500001; --i){
+    largeInt.deleteMax();
+  }
+  cout << "Sanity Check after deletes:" << endl;
+  sanityCheck(largeInt);
+
+  cout << "\nDelete Min 0.5 million integers..." << endl;
+  for (int i = 500000; i >= 1; --i){
+    largeInt.deleteMin();
+  }
+  cout << "Sanity Check after deletes:" << endl;
+  sanityCheck(largeInt);
+
+  cout << "\nConstruct MinMaxHeap<char> with capacity 1 million...";
+  cout << "\nInsert 1 million characters..." << endl;
+  MinMaxHeap<char> largeChar(1000000);
+  for (int i = 1; i <= 1000000; ++i){
+    largeChar.insert(i);
+  }
+  cout << "Sanity Check after inserts:" << endl;
+  sanityCheck(largeChar);
+
+  cout << "\nDelete Max 0.5 million characters..." << endl;
+  for (int i = 1000000; i >= 500001; --i){
+    largeChar.deleteMax();
+  }
+  cout << "Sanity Check after deletes:" << endl;
+  sanityCheck(largeChar);
+
+  cout << "\nDelete Min 0.5 million characters..." << endl;
+  for (int i = 500000; i >= 1; --i){
+    largeChar.deleteMin();
+  }
+  cout << "Sanity Check after deletes:" << endl;
+  sanityCheck(largeChar);
 
   return 0;
 

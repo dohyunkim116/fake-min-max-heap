@@ -53,7 +53,7 @@ class Heap{
   bool isCeiling(int index){return index/2 == 0;}
 
   //check if we are currently at the bottom level of a heap
-  bool isFloor(int index){return index*2 > m_last;}
+  bool isFloor(int index){return index*2 > m_size;}
 
   //update twin element of a twin heap when current heap 
   //is modified
@@ -63,7 +63,6 @@ class Heap{
   int m_capacity;
   int m_size;
   Element<T>* m_array;//array of Element object
-  int m_last;
   Heap* m_twin;//pointer to twin heap
   typename FunctionPtr<T>::compare_op m_compare;
 };  

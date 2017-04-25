@@ -68,34 +68,63 @@ Heap<T>::Heap(const Heap<T>& other)
 //      deep copy of Heap<T> rhs
 template <typename T>
 const Heap<T>& Heap<T>::operator=(const Heap<T>& rhs){
+
   //checks for self assignment
   if (this == &rhs){
     return rhs;
   }
+
   this->~Heap();
+
+  //update member variables
   m_capacity = rhs.m_capacity;
   m_size = rhs.m_size;
   m_compare = rhs.m_compare;
+
   copyHeap(rhs);
 }
 
+//updateTwinIndex: when an Element in one heap
+//                 is moved, update its updated
+//                 index in a twin element in
+//                 a twin heap
+//pre: Element changes its index after insert 
+//     or delete operation of a heap.
+//     Updated array index is passed as a param.
+//post: Twin element has a correct array index of 
+//      a updated index.
 template <typename T>
 void Heap<T>::updateTwinIndex(int index){
   int twinIndex = m_array[index].m_twinIndex;
   m_twin->m_array[twinIndex].m_twinIndex = index;
 }
 
+//bubbleUp: Carray an element up a level/levels of a heap
+//          until heap regains correct ordering
+//pre: Insert or deleteAt is executed.
+//     emptyIndex - index where bubbling occurs
+//     Element e - 1) new element when insert
+//               - 2) replacement element, which is a
+//                    last element in an array when deleteAt
+//during: If some element has been moved to a new position,
+//        then its twin element is updated with a new position
+//post: Element e is in a correct position of a heap.
 template <typename T>
 int Heap<T>::bubbleUp(int emptyIndex, Element<T> e){
+
+  //At the top of a heap
   if (isCeiling(emptyIndex)) {
     m_array[emptyIndex] = e;
     return emptyIndex;
   }
 
+  //Heap order is correct
   if (m_compare(m_array[emptyIndex/2],e)) {
     m_array[emptyIndex] = e;
     return emptyIndex;
   }
+
+  //Heap order is incorrect
   else {
     m_array[emptyIndex] = m_array[emptyIndex/2];
     updateTwinIndex(emptyIndex);
@@ -103,48 +132,66 @@ int Heap<T>::bubbleUp(int emptyIndex, Element<T> e){
   }
 }
 
+//trickleDown: Carry an element down heap level/levels until
+//             correct heap ordering is achieved.
+//pre: deleteTop or deleteAt is executed
+//     Element<T> r - replacement element, which is a last element
+//                    in an array
+//     currIndex - current index where replacement element resides
+//                 in an array
 template <typename T>
 void Heap<T>::trickleDown(int currIndex, Element<T> r){
-  Element<T> minChild;
-  int minChildIndex;
+  Element<T> compChild;//child element to compare to parent
+  int compChildIndex;
 
-  if (isFloor(currIndex)){//at the bottom of heap
+  //at the bottom of a heap
+  if (isFloor(currIndex)){
     m_array[currIndex] = r;
     updateTwinIndex(currIndex);
     return;
   }
 
+  //There is a room for r to trickle down a heap, so
+  //find child key to compare to a parent key
   else {
 
+    //left child is the last elment 
     if (currIndex*2 == m_size){
-      minChild = m_array[m_size];
-      minChildIndex = m_size;
+      compChild = m_array[m_size];
+      compChildIndex = m_size;
     }
 
     else {
 
+      //m_array[currIndex*2] <= m_array[currIndex*2+1] if Min Heap
+      //m_array[currIndex*2] >= m_array[currIndex*2+1] if Max Heap
       if (m_compare(m_array[currIndex*2],m_array[currIndex*2+1])){
-        minChild = m_array[currIndex*2];
-        minChildIndex = currIndex*2;
+        compChild = m_array[currIndex*2];
+        compChildIndex = currIndex*2;
       }
 
       else {
-        minChild = m_array[currIndex*2+1];
-        minChildIndex = currIndex*2+1;
+        compChild = m_array[currIndex*2+1];
+        compChildIndex = currIndex*2+1;
       }
     }
   }
 
-  if (m_compare(r,minChild)) {
+  //r is in correct index, so put it in
+  //a array in index, currIndex.
+  if (m_compare(r,compChild)) {
     m_array[currIndex] = r;
     updateTwinIndex(currIndex);
     return;
   }
 
-  m_array[currIndex] = minChild;
+  //r is not in correct index, so move
+  //compChild to currIndex and trickle down r
+  m_array[currIndex] = compChild;
   updateTwinIndex(currIndex);
-  trickleDown(minChildIndex, r);
+  trickleDown(compChildIndex, r);
 }
+
 
 template <typename T>
 MinMaxHeap<T>::MinMaxHeap(int capacity){

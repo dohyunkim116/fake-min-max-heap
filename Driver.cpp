@@ -780,9 +780,9 @@ int main() {
   self.dump();
   cout << endl;
 
-  cout << "******************************************************\n"
-       << "** Test D: Checks for Large Heap Inserts and Deletes**\n"  
-       << "******************************************************\n";
+  cout << "*******************************************************\n"
+       << "** Test D: Checks for Large Heap Inserts and Deletes **\n"  
+       << "*******************************************************\n";
   cout << "NOTE: takes a long time if run with valgrind, so might \n"
        << "want to comment Test C out if necessary\n";
 

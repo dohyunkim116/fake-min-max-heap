@@ -192,7 +192,7 @@ void Heap<T>::trickleDown(int currIndex, Element<T> r){
   trickleDown(compChildIndex, r);
 }
 
-
+//MinMaxHeap object constructor
 template <typename T>
 MinMaxHeap<T>::MinMaxHeap(int capacity){
   m_MinHeapPtr = new Heap<T>(capacity);
@@ -205,6 +205,7 @@ MinMaxHeap<T>::MinMaxHeap(int capacity){
   m_MaxHeapPtr->m_compare = &isGreaterThanEq;
 }
 
+//destructor for MinMaxHeap
 template <typename T>
 MinMaxHeap<T>::~MinMaxHeap(){
   delete m_MinHeapPtr;
@@ -213,6 +214,7 @@ MinMaxHeap<T>::~MinMaxHeap(){
   m_MaxHeapPtr = NULL;
 }
 
+//copy constructor for MinMaxHeap
 template <typename T>
 MinMaxHeap<T>::MinMaxHeap(const MinMaxHeap<T>& other){
   m_MinHeapPtr = new Heap<T>(*other.m_MinHeapPtr);
@@ -222,34 +224,46 @@ MinMaxHeap<T>::MinMaxHeap(const MinMaxHeap<T>& other){
   m_MaxHeapPtr->m_twin = m_MinHeapPtr;
 }
 
-
+//overloaded assignment operator for MinMaxHeap
 template <typename T>
 const MinMaxHeap<T>& MinMaxHeap<T>::operator=(const MinMaxHeap<T>& rhs){
+  
+  //checks for self assignment
   if (this == &rhs){
     return rhs;
   }
+
+  //use overloaded assignment operator of Heap
   *m_MinHeapPtr = *rhs.m_MinHeapPtr;
   *m_MaxHeapPtr = *rhs.m_MaxHeapPtr;
+
+  //Note: no need to update m_twin of MinHeap and MaxHeap
 }
 
 
-
+//size: return size of a MinMaxHeap
+//pre: Min Heap object
 template <typename T>
 int MinMaxHeap<T>::size(){
   return m_MinHeapPtr->m_size;
 }
 
-
+//insert: insert given data
+//pre: MinMaxHeap object with m_capacity > 0
+//post: data is in MinMaxHeap
 template <typename T>
 void MinMaxHeap<T>::insert(const T& data){
   if (m_MinHeapPtr->m_size+1 > m_MinHeapPtr->m_capacity){
     throw out_of_range("Heap is full.");
   }
-  m_MinHeapPtr->m_size++;
+
   Element<T> minElement, maxElement;
   minElement.m_key = data;
   maxElement.m_key = data;
-
+  
+  //insert data into Min Heap
+  m_MinHeapPtr->m_size++;
+  
   int minIndex = m_MinHeapPtr->bubbleUp(m_MinHeapPtr->m_size, 
 					minElement);
   maxElement.m_twinIndex = minIndex;

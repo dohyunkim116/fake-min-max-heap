@@ -242,7 +242,7 @@ const MinMaxHeap<T>& MinMaxHeap<T>::operator=(const MinMaxHeap<T>& rhs){
 }
 
 
-//size: return size of a MinMaxHeap
+//size: returns size of a MinMaxHeap
 //pre: Min Heap object
 template <typename T>
 int MinMaxHeap<T>::size(){
@@ -347,8 +347,9 @@ T Heap<T>::deleteTop(){
 
 //deleteMin: delete minimum element of MinMaxHeap
 //pre: At least 1 element in a min heap
-//post: Minimum element is removed from a min heap, thus
-//      from MinMaxHeap as well.
+//post: - Minimum element is removed from a min heap, thus
+//        from MinMaxHeap as well.
+//      - Removed minimum element's key is returned.
 template <typename T>
 T MinMaxHeap<T>::deleteMin(){
   return m_MinHeapPtr->deleteTop();
@@ -356,8 +357,9 @@ T MinMaxHeap<T>::deleteMin(){
 
 //deleteMax: delete maximum element of MinMaxHeap
 //pre: At least 1 element in a max heap
-//post: Maxium element is removed from a max heap, thus
-//      from MinMaxHeap as well.
+//post: - Maxium element is removed from a max heap, thus
+//        from MinMaxHeap as well.
+//      - Removed maximum element's key is returned.
 template <typename T>
 T MinMaxHeap<T>::deleteMax(){
   return m_MaxHeapPtr->deleteTop();

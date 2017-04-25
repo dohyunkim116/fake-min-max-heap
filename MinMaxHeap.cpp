@@ -269,8 +269,7 @@ void MinMaxHeap<T>::insert(const T& data){
   int minIndex = m_MinHeapPtr->bubbleUp(m_MinHeapPtr->m_size, 
 					minElement);
 
-  //update m_twinIndex of maxElement with an index of
-  //its twin element in Min Heap
+  //update m_twinIndex of twin element in Max Heap
   maxElement.m_twinIndex = minIndex;
   
   //insert Element into Max Heap
@@ -283,32 +282,56 @@ void MinMaxHeap<T>::insert(const T& data){
   m_MaxHeapPtr->m_twin->m_array[minIndex].m_twinIndex = maxIndex;
 }
 
-
+//deleteAt: delete an element in an array 
+//          at a given index
+//pre: -index of an element to be deleted
+//     -deleteTop is executed
+//post: An elment at a given index in a heap is
+//      removed
 template <typename T>
 void Heap<T>::deleteAt(int index){
+
   Element<T> replacement = m_array[m_size];
   --m_size;
 
+  //element to be removed is the last element
+  //of an array
   if (index == m_size+1){
     return;
   }
 
+  //checks if a given index is top level of a heap
   if (isCeiling(index)){
     trickleDown(index, replacement);
   }
+
+  //checks if a given index is a bottom level of a heap
   else if (isFloor(index)){
     int newIndex = bubbleUp(index, replacement);
     updateTwinIndex(newIndex);
   }
+
+  //checks if a key of replacement element is:
+  //1) Min Heap: less than equal to parent key
+  //2) Max Heap: greater than equal to parent key
   else if (m_compare(replacement,m_array[index/2])){
     int newIndex = bubbleUp(index, replacement);
     updateTwinIndex(newIndex);
   }
+  
+  //otherwise, must trickleDown
   else {
     trickleDown(index, replacement);
   }
 }
-
+//deleteTop: delete top level element of a calling heap
+//pre: - calling heap must have > 0 elements
+//     - deleteMax or deleteMin of MinMaxHeap class is 
+//       executed
+//post: - Either minimum or maximum elment of a heap is removed
+//        as well as corresponding twin element in twin heap is
+//        removed.
+//      - Removed top element's key is returned.
 template <typename T>
 T Heap<T>::deleteTop(){
   if (m_size == 0) {
@@ -322,17 +345,27 @@ T Heap<T>::deleteTop(){
   return top.m_key;
 }
 
+//deleteMin: delete minimum element of MinMaxHeap
+//pre: At least 1 element in a min heap
+//post: Minimum element is removed from a min heap, thus
+//      from MinMaxHeap as well.
 template <typename T>
 T MinMaxHeap<T>::deleteMin(){
   return m_MinHeapPtr->deleteTop();
 }
 
+//deleteMax: delete maximum element of MinMaxHeap
+//pre: At least 1 element in a max heap
+//post: Maxium element is removed from a max heap, thus
+//      from MinMaxHeap as well.
 template <typename T>
 T MinMaxHeap<T>::deleteMax(){
   return m_MaxHeapPtr->deleteTop();
 }
 
-
+//dump: prints out internals of Min and Max Heap
+//      of a MinMaxHeap
+//pre: MinMaxHeap object
 template <typename T>
 void MinMaxHeap<T>::dump(){
 
@@ -360,7 +393,11 @@ void MinMaxHeap<T>::dump(){
   cout << "--------------------------------\n" << endl;
 }
 
-
+//locateMin: retrieve key and index of an elment at a given
+//           position of a Min Heap
+//pre: 0 < pos < m_size of Min Heap
+//     data passed by reference to retrieve the key
+//     index passed by reference to retrieve the index
 template <typename T>
 void MinMaxHeap<T>::locateMin(int pos, T& data, int& index){
   if (pos > m_MinHeapPtr->m_size || pos < 1) {
@@ -370,6 +407,11 @@ void MinMaxHeap<T>::locateMin(int pos, T& data, int& index){
   index = m_MinHeapPtr->m_array[pos].m_twinIndex;
 }
 
+//locateMax: retrieve key and index of an elment at a given
+//           position of a Max Heap
+//pre: 0 < pos < m_size of Max Heap
+//     data passed by reference to retrieve the key
+//     index passed by reference to retrieve the index
 template <typename T>
 void MinMaxHeap<T>::locateMax(int pos, T& data, int& index){
   if (pos > m_MaxHeapPtr->m_size || pos < 1) {

@@ -6,14 +6,13 @@
 #include <stdexcept>
 using namespace std;
 
-
 template <typename T>
 struct Element {
   T m_key;
   int m_twinIndex;
 };
 
-//Create struct to allow templated typedef
+//create struct to allow templated typedef
 template <typename T>
 struct FunctionPtr {
   typedef bool (*compare_op)(const Element<T> lhs, const Element<T> rhs);
@@ -64,6 +63,9 @@ class Heap{
   int m_size;
   Element<T>* m_array;//array of Element object
   Heap* m_twin;//pointer to twin heap
+
+  //function pointer to static function that 
+  //distinguishes Min Heap from Max Heap and vice versa
   typename FunctionPtr<T>::compare_op m_compare;
 };  
 
@@ -71,15 +73,21 @@ class Heap{
 template <typename T>
 class MinMaxHeap {
  public:
-  MinMaxHeap(int capacity = 0);
-  ~MinMaxHeap();
-  MinMaxHeap(const MinMaxHeap<T>& other);
+  MinMaxHeap(int capacity = 0);//constructor
+  ~MinMaxHeap();//destructor
+  MinMaxHeap(const MinMaxHeap<T>& other);//copy constructor
+
+  //overloaded assignment operator
   const MinMaxHeap<T>& operator=(const MinMaxHeap<T>& rhs);
-  int size();
+
+  int size();//returns size of a MinMaxHeap object
+
   void insert(const T& data);
   T deleteMin();
   T deleteMax();
+
   void dump();
+
   void locateMin(int pos, T& data, int& index);
   void locateMax(int pos, T& data, int& index);
 
@@ -88,9 +96,11 @@ class MinMaxHeap {
   Heap<T>* m_MaxHeapPtr;
 };
 
+//defines the behavior of Min Heap of a Heap object
 template <typename T>
 static bool isLessThanEq(const Element<T> lhs, const Element<T> rhs);
 
+//defines the behavior of Max Heap of a Heap object
 template <typename T>
 static bool isGreaterThanEq(const Element<T> lhs, const Element<T> rhs);
 

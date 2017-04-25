@@ -1,28 +1,47 @@
 #ifndef _MIN_MAX_HEAP_CPP_
 #define _MIN_MAX_HEAP_CPP_
 
+//isLessThanEq: defines the behvaior of Min Heap
+//pre: Two Element objects to compare.
+//     First param is left hand side.
+//     Second param is right hand side.
+//post: true if m_key of lhs is less than equal to m_key of rhs
+//      false o.w.
 template <typename T>
 static bool isLessThanEq(const Element<T> lhs, const Element<T> rhs){
   return (lhs.m_key <= rhs.m_key);
 }
 
+//isGreaterThanEq: defines the behvaior of Max Heap
+//pre: Two Element objects to compare.
+//     First param is left hand side.
+//     Second param is right hand side.
+//post: true if the m_key of lhs is greater than equal to m_key of rhs
+//      false o.w.
 template <typename T>
 static bool isGreaterThanEq(const Element<T> lhs, const Element<T> rhs){
   return (lhs.m_key >= rhs.m_key);
 }
 
+//construct Heap object with given capacity
 template <typename T>
 Heap<T>::Heap(int capacity)
   :m_capacity(capacity), m_size(0) {
+
+  //one bigger than given capacity because 
+  //index 0 of an array holds nothing
   m_array = new Element<T>[m_capacity+1];
 }
 
+//destructor for a Heap object
 template <typename T>
 Heap<T>::~Heap() {
   delete [] m_array;
   m_array = NULL;
 }
 
+//helper function that is used in copy constructor
+//and overloaded assignment operator of a Heap object
 template <typename T>
 void Heap<T>::copyHeap(const Heap<T>& other){
   m_array = new Element<T>[m_capacity+1];
@@ -31,6 +50,10 @@ void Heap<T>::copyHeap(const Heap<T>& other){
   }
 }
 
+//copy constructor of a Heap object
+//pre: other templated Heap object to be used
+//     to construct a new Heap object
+///post: new deep copy of Heap<T> other
 template <typename T>
 Heap<T>::Heap(const Heap<T>& other)
   : m_capacity(other.m_capacity), m_size(other.m_size),
@@ -38,8 +61,14 @@ Heap<T>::Heap(const Heap<T>& other)
   copyHeap(other);
 }
 
+//overload assignment operator of a heap
+//pre: Heap object to be assigned.
+//     templated Heap object for assigning.
+//post: Heap object that is assigned is a 
+//      deep copy of Heap<T> rhs
 template <typename T>
 const Heap<T>& Heap<T>::operator=(const Heap<T>& rhs){
+  //checks for self assignment
   if (this == &rhs){
     return rhs;
   }

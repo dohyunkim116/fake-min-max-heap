@@ -759,8 +759,29 @@ int main() {
   cout << "Dump P3..." << endl; P3.dump();
   cout << endl;
 
+  cout << "****************************************\n"
+       << "** Test C: Checks for Self-Assignment **\n"  
+       << "****************************************\n";
+
+  cout << "Create MinMaxHeap<int> self..." << endl;
+  MinMaxHeap<int> self(5);
+
+  cout << "Insert 1, 2, 3, 4, 5..." << endl;
+  self.insert(1); self.insert(2);
+  self.insert(3); self.insert(4); self.insert(5);
+
+  cout << "Dump self..." << endl;
+  self.dump();
+  
+  cout << "\nAssign self to itself..." << endl;
+  self = self;
+  
+  cout << "Dump self after self assignment..." << endl;
+  self.dump();
+  cout << endl;
+
   cout << "******************************************************\n"
-       << "** Test C: Checks for Large Heap Inserts and Deletes**\n"  
+       << "** Test D: Checks for Large Heap Inserts and Deletes**\n"  
        << "******************************************************\n";
   cout << "NOTE: takes a long time if run with valgrind, so might \n"
        << "want to comment Test C out if necessary\n";

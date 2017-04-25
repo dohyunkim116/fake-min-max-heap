@@ -100,7 +100,7 @@ void Heap<T>::updateTwinIndex(int index){
 }
 
 //bubbleUp: Carray an element up a level/levels of a heap
-//          until heap regains correct ordering
+//          until heap regains correct ordering.
 //pre: Insert or deleteAt is executed.
 //     emptyIndex - index where bubbling occurs
 //     Element e - 1) new element when insert
@@ -108,7 +108,8 @@ void Heap<T>::updateTwinIndex(int index){
 //                    last element in an array when deleteAt
 //during: If some element has been moved to a new position,
 //        then its twin element is updated with a new position
-//post: Element e is in a correct position of a heap.
+//post: -Element e is in a correct position of a heap.
+//      -Returns an index of where Element e is in an array
 template <typename T>
 int Heap<T>::bubbleUp(int emptyIndex, Element<T> e){
 
@@ -257,22 +258,31 @@ void MinMaxHeap<T>::insert(const T& data){
     throw out_of_range("Heap is full.");
   }
 
+  //create Element object to be inserted into 
+  //Min Heap and Max Heap
   Element<T> minElement, maxElement;
   minElement.m_key = data;
   maxElement.m_key = data;
   
-  //insert data into Min Heap
+  //insert Element into Min Heap
   m_MinHeapPtr->m_size++;
-  
   int minIndex = m_MinHeapPtr->bubbleUp(m_MinHeapPtr->m_size, 
 					minElement);
-  maxElement.m_twinIndex = minIndex;
 
+  //update m_twinIndex of maxElement with an index of
+  //its twin element in Min Heap
+  maxElement.m_twinIndex = minIndex;
+  
+  //insert Element into Max Heap
   m_MaxHeapPtr->m_size++;
   int maxIndex = m_MaxHeapPtr->bubbleUp(m_MaxHeapPtr->m_size,
 					maxElement);
+
+
+  //update m_twinIndex of twin element in Min Heap
   m_MaxHeapPtr->m_twin->m_array[minIndex].m_twinIndex = maxIndex;
 }
+
 
 template <typename T>
 void Heap<T>::deleteAt(int index){

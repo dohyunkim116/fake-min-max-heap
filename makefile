@@ -46,12 +46,6 @@ test6: MinMaxHeap.h test6.cpp
 Driver.o: Driver.cpp
 	g++ -g -c Driver.cpp
 
-Driver1: Driver1.o MinHeap.h
-	g++ -g MinHeap.h Driver1.o -o Driver1
-
-Driver1.o: Driver1.cpp
-	g++ -g -c Driver1.cpp
-
 clean:
 	\rm -f test1 test2 test3 test4 test5 test6 Driver
 	\rm -f check1 check2 check3 check4 check5 check6
@@ -59,6 +53,3 @@ clean:
 
 run: Driver
 	./Driver
-
-run1: Driver1
-	./Driver1
